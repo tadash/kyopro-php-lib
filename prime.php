@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Prime::create($n)
+ *  - $nまでの素数の配列を返す
+ * 
+ * Prime::factorize($n)
+ *  - $nを素因数分解する
+ *  - 素数と個数の連想配列を返す
+ */
+
 class Prime {
     // $nまでの素数を生成する
     public static function create($n) {
@@ -50,6 +59,32 @@ class Prime {
             if ($isPrime($i)) $primes[] = $i;
         }
         return $primes;
+    }
+
+    // 素因数分解をする
+    public static function factorize($n) {
+        $res = [];
+
+        // 2 の処理（偶数をまとめて処理）
+        while ($n % 2 === 0) {
+            $res[2] = ($res[2] ?? 0) + 1;
+            $n /= 2;
+        }
+
+        // 3 以降は奇数だけチェック
+        for ($i = 3; $i * $i <= $n; $i += 2) {
+            while ($n % $i === 0) {
+                $res[$i] = ($res[$i] ?? 0) + 1;
+                $n /= $i;
+            }
+        }
+
+        // 残りが素数ならそれを加える
+        if ($n > 1) {
+            $res[$n] = 1;
+        }
+
+        return $res;
     }
 }
 
